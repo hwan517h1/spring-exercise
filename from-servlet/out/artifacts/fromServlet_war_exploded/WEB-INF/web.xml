@@ -1,0 +1,66 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<!--<web-app>-->
+<!--  <display-name>Spring IoC Container</display-name>-->
+
+<!--  <context-param>-->
+<!--    <param-name>contextClass</param-name> &lt;!&ndash; ApplicationContext의 유형 설정&ndash;&gt;-->
+<!--    <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>-->
+<!--    &lt;!&ndash; Java 기반 설정 시 필요 &ndash;&gt;-->
+<!--  </context-param>-->
+<!--  <context-param>-->
+<!--    <param-name>contextConfigLocation</param-name> &lt;!&ndash; ApplicationContext 생성 시 참고&ndash;&gt;-->
+<!--    <param-value>com.ioc.IoCContainerConfiguration</param-value>-->
+<!--  </context-param>-->
+<!--  <listener>-->
+<!--    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>-->
+<!--    &lt;!&ndash; ServletContextListener 인터페이스를 구현한 클래스로 (Spring의) ApplicationContext를 생성 후 ServletContext에 등록하여 연동함 &ndash;&gt;-->
+<!--  </listener>-->
+
+<!--  <servlet>-->
+<!--    <servlet-name>IoCContainer</servlet-name>-->
+<!--    <servlet-class>com.ioc.Servlet</servlet-class>-->
+<!--  </servlet>-->
+<!--  <servlet-mapping>-->
+<!--    <servlet-name>IoCContainer</servlet-name>-->
+<!--    <url-pattern>/ioc/*</url-pattern>-->
+<!--  </servlet-mapping>-->
+<!--</web-app>-->
+
+<web-app>
+<display-name>Spring MVC using DispatcherServlet</display-name>
+
+<context-param>
+  <param-name>contextClass</param-name> <!-- ApplicationContext의 유형 설정-->
+  <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+  <!-- Java 기반 설정 시 필요 -->
+</context-param>
+<context-param>
+  <param-name>contextConfigLocation</param-name> <!-- ApplicationContext 생성 시 참고-->
+  <param-value>com.mvc.ApplicationConfiguration</param-value>
+</context-param>
+<listener>
+  <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  <!-- ServletContextListener 인터페이스를 구현한 클래스로 (Spring의) ApplicationContext를 생성 후 ServletContext에 등록하여 연동함 -->
+</listener>
+
+<!-- ContextLoaderListener가 만든 ApplicationContext과 DispatcherServlet이 만든 ApplicationContext가 계층적으로 존재해도 되지만, 각각 하나씩만 존재해도 됨 -->
+<servlet>
+  <servlet-name>DispatcherServlet</servlet-name>
+  <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+  <init-param>
+    <param-name>contextClass</param-name>
+    <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+  </init-param>
+  <init-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>com.mvc.WebConfiguration</param-value>
+  </init-param>
+</servlet>
+<servlet-mapping>
+  <servlet-name>DispatcherServlet</servlet-name>
+  <url-pattern>/mvc/*</url-pattern>
+</servlet-mapping>
+</web-app>

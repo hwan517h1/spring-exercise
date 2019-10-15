@@ -1,0 +1,8 @@
+/**/*.iml
+/**/target/
+/**/.*
+!/.gitignore
+
+.DS_Store
+.idea/
+.vscode/

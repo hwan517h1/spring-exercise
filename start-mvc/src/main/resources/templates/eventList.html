@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Event</title>
+</head>
+<body>
+    <h1>Event List 1</h1>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Limit</th>
+            <th>Start</th>
+            <th>End</th>
+        </tr>
+        <tr th:each="event: ${events}">
+            <td th:text="${event.name}">Error</td>
+            <td th:text="${event.limit}">Error</td>
+            <td th:text="${event.start}">Error</td>
+            <td th:text="${event.end}">Error</td>
+        </tr>
+    </table>
+</body>
+</html>
