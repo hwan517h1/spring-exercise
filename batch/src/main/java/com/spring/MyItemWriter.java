@@ -13,5 +13,7 @@ public class MyItemWriter implements ItemWriter<Employee> {
             System.out.print(employee.getFirst_name() + " ");
             System.out.println(employee.getLast_name());
         }
+
+        System.out.println("[Info] ItemWriter handles 10 items.");
     }
 }

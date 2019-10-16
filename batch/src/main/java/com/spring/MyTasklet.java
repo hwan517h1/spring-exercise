@@ -5,14 +5,45 @@ import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import javax.sql.DataSource;
+import java.util.List;
+
 public class MyTasklet implements Tasklet {
+
+    private DataSource dataSource;
+    private String sql;
+
+    public DataSource getDataSource() {
+        return dataSource;
+    }
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+    public String getSql() {
+        return sql;
+    }
+    public void setSql(String sql) {
+        this.sql = sql;
+    }
 
     @Override
     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
         System.out.println("작업 시작");
+
         // 작업 내용
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(getDataSource());
+        List items = jdbcTemplate.query(getSql(), new MyRowMapper());
+
+        for (Object object : items) {
+            Employee employee = (Employee) object;
+            System.out.print(employee.getFirst_name() + " ");
+            System.out.println(employee.getLast_name());
+        }
+
         System.out.println("작업 완료");
 
-        return null;
+        return RepeatStatus.FINISHED;
     }
 }
