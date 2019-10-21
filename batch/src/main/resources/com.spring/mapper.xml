@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 방법 2 -->
+<!--<mapper namespace="com.spring.MyRepository">-->
+
+<!--    <resultMap id="EmployeeMap" type="com.spring.Employee">-->
+<!--        <result column="emp_no" property="emp_no" jdbcType="INTEGER" />-->
+<!--        <result column="birth_date" property="birth_date" jdbcType="VARCHAR" />-->
+<!--        <result column="first_name" property="first_name" jdbcType="VARCHAR" />-->
+<!--        <result column="last_name" property="last_name" jdbcType="VARCHAR" />-->
+<!--        <result column="gender" property="gender" jdbcType="VARCHAR" />-->
+<!--        <result column="hire_date" property="hire_date" jdbcType="VARCHAR" />-->
+<!--    </resultMap>-->
+
+<!--    <select id="search" resultMap="EmployeeMap">-->
+<!--        SELECT-->
+<!--            *-->
+<!--        FROM-->
+<!--            employees-->
+<!--        WHERE-->
+<!--            emp_no &lt; 10101-->
+<!--    </select>-->
+<!--</mapper>-->
+
+<!-- 방법 3, 4 -->
+<mapper namespace="com.spring.MyInterface">
+
+<resultMap id="EmployeeMap" type="com.spring.Employee">
+    <result column="emp_no" property="emp_no" jdbcType="INTEGER" />
+    <result column="birth_date" property="birth_date" jdbcType="VARCHAR" />
+    <result column="first_name" property="first_name" jdbcType="VARCHAR" />
+    <result column="last_name" property="last_name" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="VARCHAR" />
+    <result column="hire_date" property="hire_date" jdbcType="VARCHAR" />
+</resultMap>
+
+<select id="search" resultMap="EmployeeMap">
+    SELECT
+        *
+    FROM
+        employees
+    WHERE
+        emp_no &lt; 10101
+</select>
+</mapper>
+

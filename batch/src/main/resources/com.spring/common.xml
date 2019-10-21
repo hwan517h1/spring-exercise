@@ -4,18 +4,26 @@
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation=
-           "http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
 	        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+		    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
 
-    <!-- 데이터베이스 -->
+    <context:component-scan base-package="com.spring" />
+
+    <!-- Database -->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
         <property name="url" value="jdbc:mysql://127.0.0.1:3306/employees?serverTimezone=UTC" />
         <property name="username" value="root" />
         <property name="password" value="" />
     </bean>
+
+    <!-- Transaction -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 
     <!-- Spring Batch의 metadata를 담당하는 빈 -->
     <bean id="jobRepository"
@@ -30,13 +38,22 @@
         <property name="jobRepository" ref="jobRepository" />
     </bean>
 
-    <!-- This tells Spring to activate annotation-driven transactions -->
-    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <!-- 방법 2: SqlSessionFactory for MyBatis -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
+        <property name="configLocation" value="classpath:com.spring/mybatis.xml" />
+        <property name="mapperLocations" value="classpath:com.spring/mapper.xml" />
     </bean>
-    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 
-    <!-- Spring Batch의 테스트를 실행하는 빈 -->
-    <bean id="jobLauncherTestUtils"
-          class="org.springframework.batch.test.JobLauncherTestUtils" />
+    <!-- 방법 3: SqlSession for MyBatis -->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean>
+
+    <!-- 방법 4: MapperFactory for MyBatis -->
+    <bean id="MapperFactory" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.spring.MyInterface" />
+        <property name="sqlSessionTemplate" ref="sqlSession" />
+    </bean>
+
 </beans>

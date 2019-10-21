@@ -6,9 +6,14 @@
            "http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd
 		    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <!-- Import common.xml -->
     <import resource="classpath:com.spring/common.xml" />
 
-    <!-- Tasklet -->
+    <!-- Spring Batch의 테스트를 실행하는 빈 -->
+    <bean id="jobLauncherTestUtils"
+          class="org.springframework.batch.test.JobLauncherTestUtils"/>
+
+    <!-- Job 1. Custom Tasklet -->
     <job id="MyJob1"
          xmlns="http://www.springframework.org/schema/batch">
         <description>
@@ -26,17 +31,18 @@
 
     <!-- scope는 빈을 어떻게 생성할지 결정하는데, scope="step"은 스텝이 실행될 때마다 개별적인 빈을 하나씩 만든다. 만약 scope가 없다면 default는 singleton으로 job 실행 시 생성되어 job이 끝날 때까지 공유된다. -->
     <bean id="MyTasklet" class="com.spring.MyTasklet" scope="step" >
-        <property name="dataSource" ref="dataSource"/>
-        <property name="sql">
-            <value>
-                <![CDATA[
-				    SELECT * FROM employees WHERE emp_no < 10101;
-				]]>
-            </value>
-        </property>
+        <!-- 방법 1 -->
+<!--        <property name="dataSource" ref="dataSource"/>-->
+<!--        <property name="sql">-->
+<!--            <value>-->
+<!--                <![CDATA[-->
+<!--				    SELECT * FROM employees WHERE emp_no < 10101;-->
+<!--				]]>-->
+<!--            </value>-->
+<!--        </property>-->
     </bean>
 
-    <!-- Chunk(Item) -->
+    <!-- Job 2.Tasklet with ItemReader and ItemWriter -->
 <!--    <job id="MyJob2" xmlns="http://www.springframework.org/schema/batch">-->
 <!--        <description>-->
 <!--            DB의 테이블을 읽어 출력-->
@@ -54,17 +60,17 @@
 <!--        </step>-->
 <!--    </job>-->
 
-    <bean id="MyRowMapper" class="com.spring.MyRowMapper" scope="step" />
-    <bean id="JdbcCursorItemReader" class="org.springframework.batch.item.database.JdbcCursorItemReader" scope="step">
-        <property name="dataSource" ref="dataSource" />
-        <property name="rowMapper" ref="MyRowMapper" />
-        <property name="sql">
-            <value>
-                <![CDATA[
-				    SELECT * FROM employees WHERE emp_no < 10101;
-				]]>
-            </value>
-        </property>
-    </bean>
-    <bean id="MyItemWriter" class="com.spring.MyItemWriter" scope="step" />
+<!--    <bean id="MyRowMapper" class="com.spring.MyRowMapper" scope="step" />-->
+<!--    <bean id="JdbcCursorItemReader" class="org.springframework.batch.item.database.JdbcCursorItemReader" scope="step">-->
+<!--        <property name="dataSource" ref="dataSource" />-->
+<!--        <property name="rowMapper" ref="MyRowMapper" />-->
+<!--        <property name="sql">-->
+<!--            <value>-->
+<!--                <![CDATA[-->
+<!--				    SELECT * FROM employees WHERE emp_no < 10101;-->
+<!--				]]>-->
+<!--            </value>-->
+<!--        </property>-->
+<!--    </bean>-->
+<!--    <bean id="MyItemWriter" class="com.spring.MyItemWriter" scope="step" />-->
 </beans>
