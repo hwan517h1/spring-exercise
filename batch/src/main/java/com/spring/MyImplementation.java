@@ -13,7 +13,7 @@ import java.util.List;
 //    @Autowired
 //    SqlSession sqlSession;
 //
-//    public List<Employee> search() {
-//        return sqlSession.getMapper(MyInterface.class).search();
+//    public List<Employee> search(MyParameter myParameter) {
+//        return sqlSession.getMapper(MyInterface.class).search(myParameter);
 //    }
 //}

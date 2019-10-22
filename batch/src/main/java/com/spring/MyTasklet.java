@@ -52,14 +52,17 @@ public class MyTasklet implements Tasklet {
 //        JdbcTemplate jdbcTemplate = new JdbcTemplate(this.getDataSource());
 //        List items = jdbcTemplate.query(this.getSql(), new MyRowMapper());
 
+        MyParameter myParameter = new MyParameter();
+        myParameter.setEmp_no(10101);
+
         // 방법 2
 //        List<Employee> items = this.myRepository.search();
 
         // 방법 3
-//        List<Employee> items = this.myImplementation.search();
+//        List<Employee> items = this.myImplementation.search(myParameter);
 
         // 방법 4
-        List<Employee> items = this.myInterface.search();
+        List<Employee> items = this.myInterface.search(myParameter);
 
         for (Object object : items) {
             Employee employee = (Employee) object;
@@ -67,6 +70,7 @@ public class MyTasklet implements Tasklet {
             System.out.println(employee.getLast_name());
         }
 
+        System.out.println("작업 수: " + items.size());
         System.out.println("작업 완료");
 
         return RepeatStatus.FINISHED;
