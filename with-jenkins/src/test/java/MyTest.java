@@ -34,7 +34,7 @@ public class MyTest {
 
         JobExecution jobExecution = jobLauncherTestUtils.launchJob();
 
-        System.out.println(jobExecution.getStatus() + " #: " + jobExplorer.getJobInstanceCount(job.getName()));
+        System.out.println("#" + jobExplorer.getJobInstanceCount(job.getName()) + " JobInstance: " + jobExecution.getStatus());
     }
 }
 
