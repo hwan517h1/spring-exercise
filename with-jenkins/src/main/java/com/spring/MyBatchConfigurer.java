@@ -86,7 +86,7 @@ public class MyBatchConfigurer implements BatchConfigurer {
     @Bean(name = "MyStep2")
     public Step step2() {
         return this.stepBuilderFactory.get("Step2")
-                .tasklet(new MyTasklet2())
+                .tasklet(new MyTasklet2(dataSource))
                 .build();
     }
 
