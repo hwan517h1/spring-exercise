@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class DataSourceConfigurer {
 
     @Bean
-    public DriverManagerDataSource dataSource() {
+    public DriverManagerDataSource createDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.springframework.jdbc.datasource.DriverManagerDataSource");
         dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/employees?serverTimezone=UTC");
@@ -23,7 +23,7 @@ public class DataSourceConfigurer {
     }
 
     @Bean
-    public DataSourceTransactionManager transactionManager() {
-        return new DataSourceTransactionManager(dataSource());
+    public DataSourceTransactionManager createTransactionManager() {
+        return new DataSourceTransactionManager(createDataSource());
     }
 }

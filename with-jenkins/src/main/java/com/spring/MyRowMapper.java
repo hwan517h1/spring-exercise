@@ -7,7 +7,6 @@ import java.sql.SQLException;
 
 public class MyRowMapper implements RowMapper<Employee> {
 
-    @Override
     public Employee mapRow(ResultSet resultSet, int i) throws SQLException {
 
         Employee employee = new Employee();

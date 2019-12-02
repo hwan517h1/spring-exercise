@@ -1,11 +1,6 @@
 package com.spring;
 
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.BatchConfigurer;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.explore.support.JobExplorerFactoryBean;
 import org.springframework.batch.core.launch.JobLauncher;
@@ -20,7 +15,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 
 @Configuration
-@EnableBatchProcessing
 @Import(value = {DataSourceConfigurer.class})
 public class MyBatchConfigurer implements BatchConfigurer {
 
@@ -29,13 +23,8 @@ public class MyBatchConfigurer implements BatchConfigurer {
     @Autowired
     DataSourceTransactionManager transactionManager;
 
-    @Autowired
-    JobBuilderFactory jobBuilderFactory;
-    @Autowired
-    StepBuilderFactory stepBuilderFactory;
-
-    @Bean
-    public JobRepository jobRepository() throws Exception {
+    @Bean(name = "jobRepository")
+    public JobRepository createJobRepository() throws Exception {
         JobRepositoryFactoryBean jobRepositoryFactory = new JobRepositoryFactoryBean();
         jobRepositoryFactory.setDataSource(dataSource);
         jobRepositoryFactory.setTransactionManager(transactionManager);
@@ -43,16 +32,16 @@ public class MyBatchConfigurer implements BatchConfigurer {
         return jobRepositoryFactory.getObject();
     }
 
-    @Bean
-    public JobLauncher jobLauncher() throws Exception {
+    @Bean(name = "jobLauncher")
+    public JobLauncher createJobLauncher() throws Exception {
         SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
-        jobLauncher.setJobRepository(jobRepository());
+        jobLauncher.setJobRepository(createJobRepository());
 
         return jobLauncher;
     }
 
-    @Bean
-    public JobExplorer jobExplorer() throws Exception {
+    @Bean(name = "jobExplorer")
+    public JobExplorer createJobExplorer() throws Exception {
         JobExplorerFactoryBean jobExplorerFactory = new JobExplorerFactoryBean();
         jobExplorerFactory.setDataSource(dataSource);
         jobExplorerFactory.afterPropertiesSet();
@@ -61,7 +50,7 @@ public class MyBatchConfigurer implements BatchConfigurer {
     }
 
     public JobRepository getJobRepository() throws Exception {
-        return this.jobRepository();
+        return this.createJobRepository();
     }
 
     public PlatformTransactionManager getTransactionManager() throws Exception {
@@ -69,32 +58,10 @@ public class MyBatchConfigurer implements BatchConfigurer {
     }
 
     public JobLauncher getJobLauncher() throws Exception {
-        return this.jobLauncher();
+        return this.createJobLauncher();
     }
 
     public JobExplorer getJobExplorer() throws Exception {
-        return jobExplorer();
-    }
-
-    @Bean(name = "MyStep1")
-    public Step step1() {
-        return this.stepBuilderFactory.get("Step1")
-                .tasklet(new MyTasklet1())
-                .build();
-    }
-
-    @Bean(name = "MyStep2")
-    public Step step2() {
-        return this.stepBuilderFactory.get("Step2")
-                .tasklet(new MyTasklet2(dataSource))
-                .build();
-    }
-
-    @Bean(name = "MyJob")
-    public Job job() {
-        return this.jobBuilderFactory.get("Job")
-                .start(step1())
-                .next(step2())
-                .build();
+        return createJobExplorer();
     }
 }
